@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css">
+
+	<title>Jasmine Spec Runner</title>
+
+	<!-- jasmine files -->
+	<script src="lib/jasmine/jasmine.js"></script>
+	<script src="lib/jasmine/jasmine-html.js"></script>
+
+	<!-- dependencies -->
+	<script src="/components/jquery/jquery.js"></script>
+
+	<!-- source files -->
+	<script src="/src/kiva.js"></script>
+	<script src="/src/Object.js"></script>
+	<script src="/src/Request.js"></script>
+	<script src="/src/Requests/Loans.js"></script>
+	<script src="/src/Requests/Lenders.js"></script>
+
+	<!-- spec files -->
+	<script src="spec/kiva.js"></script>
+	<script src="spec/Object.js"></script>
+	<script src="spec/Request.js"></script>
+</head>
+
+<body>
+
+	<!-- Run Jasmine -->
+	<script>
+		(function() {
+			var jasmineEnv = jasmine.getEnv()
+			, htmlReporter = new jasmine.HtmlReporter();
+
+			jasmineEnv.updateInterval = 1000;
+			jasmineEnv.addReporter(htmlReporter);
+			jasmineEnv.specFilter = function(spec) {
+				return htmlReporter.specFilter(spec);
+			};
+
+			jasmineEnv.execute();
+		}());
+	</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="/components/jquery/jquery.js"></script>
+		<script src="/src/kiva.js"></script>
+		<script src="/src/Object.js"></script>
+		<script src="/src/Request.js"></script>
+		<script src="/src/Requests/Loans.js"></script>
+		<script src="/src/Requests/Lenders.js"></script>
+        <script src="/src/Requests/Teams.js"></script>
+
+	</head>
+	<body>
+
+	<script>
+        var loans = kiva.Loans.create();
+        loans.fetch(46382);
+
+        var lenders = kiva.Lenders.create();
+        lenders.fetch(['keith2231', 'thomas5246']);
+
+        loans.jqXhr.done(function () {
+            $('#results').append(JSON.stringify(loans.content));
+        });
+
+        lenders.jqXhr.done(function () {
+            $('#results').append(JSON.stringify(lenders.content));
+        })
+	</script>
+
+	<div id="results"></div>
+
+	</body>
+</html>
