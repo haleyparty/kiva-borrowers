@@ -18,9 +18,13 @@ function makeListItems(key, val) {
 
   $.each(val, function(key, val) {
     if (typeof(val) === 'object') {
-      items.push(makeListItems(key, val));
+      if (key !== 'image' && key !== 'description') {
+        items.push(makeListItems(key, val));
+      }
     } else {
-      items.push('<li class="' + key + '">' + key + ': ' + val + '</li>');
+      if (key !== 'country_code') {
+        items.push('<li class="' + key + '"><b>' + key + ':</b> ' + val + '</li>');
+      }
     }
   });
 
