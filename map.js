@@ -15,6 +15,7 @@ $(document).ready(function() {
     });
 
     var lat, lng;
+    var infoWindow = new google.maps.InfoWindow();
     $.each(borrowers, function(index, borrower) {
       // get lat/long pairs
       var pairs = borrower.location.geo.pairs;
@@ -22,11 +23,19 @@ $(document).ready(function() {
       lat = Number(pairs[0]);
       lng = Number(pairs[1]);
 
+      var infoWindow = new google.maps.InfoWindow({
+        content: '<p>Testing</p>'
+      })
+
       var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lng),
         map: map,
         title: borrower.name
       });
+
+      marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+      })
     });
   }
 
@@ -47,36 +56,11 @@ $(document).ready(function() {
 //     zoom: 7
 //   });
 
-
-
-//   // var infoWindow = new google.maps.InfoWindow();
-
-//   // var marker, i;
-
-//   // for (var i = 0; i < borrowers.length; i++) {
-//   //   marker = new google.maps.Marker({
-//   //     position: new google.maps.LatLng(locations[i][/*borrower lat*/], locations[i][/*borrower long*/]),
-//   //     map: map
-//   //     title: locations[i][/*borrower name*/]
-//   //   });
-
-//   //   google.maps.event.addListener(marker, 'click', function(marker, i) {
-//   //     return function() {
-//   //       infoWindow.setContent(locations[i][/*html*/]);
-//   //       infoWindow.open(map, marker);
-//   //     }
-//   //   });
-//   // }
-
 //   // loop through to add markers of each borrower
 //   // var marker = new google.maps.Marker({
 //   //   position: borrowerLatLong,
 //   //   map: map,
 //   //   title: 'Hello, world!' // borrower name goes here
-//   // });
-
-//   // var infoWindow = new google.maps.InfoWindow({
-//   //   content: '<h3>Testing</h3><p>Hi</p>' // borrower info goes here
 //   // });
 
 //   // marker.addListener('click', function() {
