@@ -18,7 +18,7 @@ function makeListItems(key, val) {
 
   $.each(val, function(key, val) {
     if (typeof(val) === 'object') {
-      if (key !== 'image' && key !== 'description') {
+      if (key !== 'image' && key !== 'description' && key !== 'tags') {
         items.push(makeListItems(key, val));
       }
     } else {
@@ -55,7 +55,7 @@ $(document).ready(function() {
   $.getJSON(url+page, function(data) {
     var items = [];
 
-    // Build the list
+    // build the list
     items.push('<ul>');
     items.push(makeListItems(title, data.loans));
     items.push('</ul>');
