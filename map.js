@@ -24,8 +24,12 @@ $(document).ready(function() {
       lng = Number(pairs[1]);
 
       var infoWindow = new google.maps.InfoWindow({
-        content: '<p>Testing</p>'
-      })
+        content: '<h3>' + borrower.name + '</h3> \
+                  <p><b>Amount:</b> $' + borrower.loan_amount + '</p> \
+                  <p><b>Sector:</b> ' + borrower.sector + '</p> \
+                  <p><b>Activity:</b> ' + borrower.activity + '</p> \
+                  <p><b>Use:</b> ' + borrower.use + '</p>'
+      });
 
       var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lng),
@@ -35,7 +39,7 @@ $(document).ready(function() {
 
       marker.addListener('click', function() {
         infoWindow.open(map, marker);
-      })
+      });
     });
   }
 
@@ -49,21 +53,3 @@ $(document).ready(function() {
   });
 
 });
-
-// function initMap(borrowers) {
-//   map = new google.maps.Map(document.getElementById('map'), {
-//     center: {lat: 13, lng: 122},
-//     zoom: 7
-//   });
-
-//   // loop through to add markers of each borrower
-//   // var marker = new google.maps.Marker({
-//   //   position: borrowerLatLong,
-//   //   map: map,
-//   //   title: 'Hello, world!' // borrower name goes here
-//   // });
-
-//   // marker.addListener('click', function() {
-//   //   infoWindow.open(map, marker);
-//   // });
-// }
