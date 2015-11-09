@@ -1,8 +1,9 @@
-// put top 20 borrowers onto page
+// put borrowers onto page (20 max, sorted by loan amount)
 var makeBorrowerOption = function(loans) {
   var items = [];
   $.each(loans, function(index, loan) {
     items.push('<h3>' + loan.name + '</h3> \
+                <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '</p> \
                 <p><b>Activity:</b> ' + loan.activity + '</p> \
                 <p><b>Use:</b> ' + loan.use + '</p> \
                 <p><b>Amount Requested:</b> $' + loan.loan_amount + '</p> \
@@ -12,6 +13,17 @@ var makeBorrowerOption = function(loans) {
                 );
   });
   return items.join('');
+};
+
+// get countries
+var grabCountries = function(loans) {
+  var countries = {};
+  $.each(loans, function(index, loan) {
+    if (!countries[loan.location.country]) {
+      countries[loan.location.country] = true;
+    }
+  });
+  return countries;
 };
 
 // grabs sector & region to generate get request for JSON data
@@ -39,5 +51,29 @@ var getData = function() {
     items.push(makeBorrowerOption(data.loans));
     items.push('</ul>');
     $('#content').html(items.join(''));
+
+    // get borrower countries
+    var borrowerCountries = grabCountries(data.loans);
+
+    // get 3-char country codes to use in datamap
+    var countryCodes = {};
+    for (country in borrowerCountries) {
+      var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;    
+
+      for (var i = 0, j = datamapCountries.length; i < j; i++) {
+        if (datamapCountries[i].properties.name === country) {
+          countryCodes[country] = datamapCountries[i].id;
+        }
+      }
+    }
+    
+    var choropleth = {};
+    for (country in countryCodes) {
+      var countryCode = countryCodes[country];
+      choropleth[countryCode] = {fillKey: 'borrowerLivesIn'};
+    }
+    console.log(JSON.stringify(choropleth));
+
+    map.updateChoropleth(choropleth);
   });
 };

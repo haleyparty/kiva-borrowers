@@ -1,4 +1,4 @@
-var basic = new Datamap({
+var map = new Datamap({
   element: document.getElementById('map'),
   fills: {
     defaultFill: '#ABDDA4',
