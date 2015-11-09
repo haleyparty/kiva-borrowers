@@ -3,3 +3,13 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+#content {
+  float: left;
+  width: 50%;
+}
+
+#map {
+  float: right;
+  width: 50%;
+}
