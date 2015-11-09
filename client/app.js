@@ -2,12 +2,13 @@
 var makeBorrowerOption = function(loans) {
   var items = [];
   $.each(loans, function(index, loan) {
-    console.log(loan);
-    items.push('<p><b>' + loan.name + '</b></p>');
-    items.push('<p>' + loan.activity + '</p>');
-    items.push('<p>' + loan.use + '</p>');
-    items.push('<p>$' + loan.loan_amount + '</p>');
-    items.push('<p>$' + loan.funded_amount + '</p>');
+    items.push('<h3>' + loan.name + '</h3> \
+                <p><b>Activity:</b> ' + loan.activity + '</p> \
+                <p><b>Use:</b> ' + loan.use + '</p> \
+                <p><b>Amount Requested:</b> $' + loan.loan_amount + '</p> \
+                <p><b>Amount Funded:</b> $' + loan.funded_amount + '</p> \
+                <p><b>Amount Left:</b> $' + (loan.loan_amount - loan.funded_amount) + '</p>'
+                );
   });
   return items.join('');
 };
