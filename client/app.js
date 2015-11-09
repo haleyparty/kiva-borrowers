@@ -7,7 +7,8 @@ var makeBorrowerOption = function(loans) {
                 <p><b>Use:</b> ' + loan.use + '</p> \
                 <p><b>Amount Requested:</b> $' + loan.loan_amount + '</p> \
                 <p><b>Amount Funded:</b> $' + loan.funded_amount + '</p> \
-                <p><b>Amount Left:</b> $' + (loan.loan_amount - loan.funded_amount) + '</p>'
+                <p><b>Amount Left:</b> $' + (loan.loan_amount - loan.funded_amount) + '</p> \
+                <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p>'
                 );
   });
   return items.join('');
