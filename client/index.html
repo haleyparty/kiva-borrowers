@@ -9,7 +9,7 @@
   <body>
     <h1>Kiva: Where to Lend</h1>
 
-    <select id='filterSector' onchange='changeFunc();'>
+    <select id='filterSector'>
       <option value=''>Select Sector</option>
       <option value='Agriculture'>Agriculture</option>
       <option value='Arts'>Arts</option>
@@ -27,6 +27,19 @@
       <option value='Transportation'>Transportation</option>
       <option value='Wholesale'>Wholesale</option>
     </select>
+
+    <select id='filterRegion'>
+      <option value=''>Select Sector</option>
+      <option value='af'>Africa</option>
+      <option value='as'>Asia</option>
+      <option value='ca'>Central America</option>
+      <option value='ee'>Eastern Europe</option>
+      <option value='me'>Middle East</option>
+      <option value='na'>North America</option>
+      <option value='sa'>South America</option>
+    </select>
+
+    <button onclick='getData();'>Click Me</button>
 
     <div id="content"></div>
     

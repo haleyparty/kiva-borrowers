@@ -12,11 +12,15 @@ var makeBorrowerOption = function(loans) {
   return items.join('');
 };
 
-// grabs sector to generate get request for JSON data
-var changeFunc = function() {
-  var selectedOption = document.getElementById('filterSector');
-  var selectedValue = selectedOption.options[selectedOption.selectedIndex].value;
-  var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + selectedValue + '&sort_by=loan_amount';
+// grabs sector & region to generate get request for JSON data
+var getData = function() {
+  var selectedRegion = document.getElementById('filterRegion');
+  var regionValue = selectedRegion.options[selectedRegion.selectedIndex].value;
+
+  var selectedSector = document.getElementById('filterSector');
+  var sectorValue = selectedSector.options[selectedSector.selectedIndex].value;
+
+  var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
   $.getJSON(url, function(data) {
     var items = [];
     // build list
