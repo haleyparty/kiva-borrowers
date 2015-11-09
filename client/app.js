@@ -52,13 +52,14 @@ var getData = function() {
     items.push('</ul>');
     $('#content').html(items.join(''));
 
+
     // get borrower countries
     var borrowerCountries = grabCountries(data.loans);
 
     // get 3-char country codes to use in datamap
     var countryCodes = {};
+    var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;    
     for (country in borrowerCountries) {
-      var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;    
 
       for (var i = 0, j = datamapCountries.length; i < j; i++) {
         if (datamapCountries[i].properties.name === country) {
@@ -67,13 +68,20 @@ var getData = function() {
       }
     }
     
+    // create choropleth object to inject into map
     var choropleth = {};
     for (country in countryCodes) {
       var countryCode = countryCodes[country];
       choropleth[countryCode] = {fillKey: 'borrowerLivesIn'};
     }
-    console.log(JSON.stringify(choropleth));
 
+    for (var i = 0, j = datamapCountries.length; i < j; i++) {
+      if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
+        var countryCode = datamapCountries[i].id;
+        choropleth[countryCode] = {fillKey: 'defaultFill'};
+      }
+    }
+    console.log(choropleth);
     map.updateChoropleth(choropleth);
   });
 };
