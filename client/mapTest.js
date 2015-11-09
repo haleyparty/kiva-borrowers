@@ -5,6 +5,6 @@ var map = new Datamap({
     borrowerLivesIn: '#306596'
   },
   data: {
-    // BRA: {fillKey: 'borrowerLivesIn'}
+    // this will be filled upon each submit click
   }
 });

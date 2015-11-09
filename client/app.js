@@ -2,14 +2,23 @@
 var makeBorrowerOption = function(loans) {
   var items = [];
   $.each(loans, function(index, loan) {
-    items.push('<h3>' + loan.name + '</h3> \
+    console.log(loan);
+    items.push('<table style="width:100%"> \
+                <tr> \
+                <td> \
+                <h3>' + loan.name + '</h3> \
                 <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '</p> \
                 <p><b>Activity:</b> ' + loan.activity + '</p> \
                 <p><b>Use:</b> ' + loan.use + '</p> \
                 <p><b>Amount Requested:</b> $' + loan.loan_amount + '</p> \
-                <p><b>Amount Funded:</b> $' + loan.funded_amount + '</p> \
-                <p><b>Amount Left:</b> $' + (loan.loan_amount - loan.funded_amount) + '</p> \
-                <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p>'
+                <p><i>Amount Funded So Far: $' + loan.funded_amount + '</i></p> \
+                <p><b>Amount Left to Fund:</b> $' + (loan.loan_amount - loan.funded_amount) + '</p> \
+                <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p> \
+                </td> \
+                <tr> \
+                <img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
+                </tr> \
+                </table>'
                 );
   });
   return items.join('');
@@ -70,18 +79,21 @@ var getData = function() {
     
     // create choropleth object to inject into map
     var choropleth = {};
+
+    // highlight the countries in countryCodes object
     for (country in countryCodes) {
       var countryCode = countryCodes[country];
       choropleth[countryCode] = {fillKey: 'borrowerLivesIn'};
     }
 
+    // make countries not in countryCodes object the default color
     for (var i = 0, j = datamapCountries.length; i < j; i++) {
       if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
         var countryCode = datamapCountries[i].id;
         choropleth[countryCode] = {fillKey: 'defaultFill'};
       }
     }
-    console.log(choropleth);
+
     map.updateChoropleth(choropleth);
   });
 };
