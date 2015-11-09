@@ -22,7 +22,16 @@ var getData = function() {
   var selectedSector = document.getElementById('filterSector');
   var sectorValue = selectedSector.options[selectedSector.selectedIndex].value;
 
-  var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
+  if (sectorValue !== '' && regionValue !== '') {
+    var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
+  } else if (regionValue === '' && sectorValue !== '') {
+    var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&sort_by=loan_amount';
+  } else if (sectorValue === '' && regionValue !== '') {
+    var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&region=' + regionValue + '&sort_by=loan_amount';
+  } else {
+    var url = 'http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount';
+  }
+
   $.getJSON(url, function(data) {
     var items = [];
     // build list
