@@ -128,6 +128,7 @@ var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
 var JSONcall = function(url, amountToLend, pageNum) {
   $.getJSON(url, function(data) {
+    console.log(data.loans);
     createBorrowerInfo(data.loans, amountToLend, pageNum);
     contentHTML = $('#content').html();
 

@@ -23,7 +23,7 @@ h2 {
 }
 
 .highlighted {
-  background-color: yellow;
+  background-color: #ABDDA4;
 }
 
 .divider {
@@ -47,7 +47,7 @@ h2 {
   margin-left: 620px;
   position: absolute;
   width: 650px;
-  height: 400px;
+  height: 300px;
 }
 
 #incorrectInput {
