@@ -136,26 +136,21 @@ var JSONcall = function(url, amountToLend, pageNum) {
     if (contentHTML === '') {
       createChoropleth({}, {}, datamapCountries, true);
       return;
-    } else if (pageNum <= 3) {
-      var callThis = pageNum > 1 ? false : true;
+    }
+    
+    var callThis = pageNum > 1 ? false : true;
 
-      var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
+    var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
 
-      var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
+    var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
 
-      createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
+    createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
 
+    if (pageNum <= 3) {
       pageNum++;
       JSONcall(url + '&page=' + pageNum, amountToLend, pageNum);      
-    } else {
-      var callThis = pageNum > 1 ? false : true;
-
-      var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
-
-      var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
-
-      createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
     }
+
   });
 }
 
