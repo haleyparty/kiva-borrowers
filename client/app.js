@@ -12,7 +12,7 @@ var urlChoice = function(sectorValue, regionValue, pageNum) {
   } else if (sectorValue === '' && regionValue !== '') {
     url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&region=' + regionValue + '&sort_by=loan_amount';
   } else {
-    url = 'http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount';
+    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sort_by=loan_amount';
   }
   url = url + '&page=' + pageNum;
   return url;
