@@ -86,6 +86,15 @@ var createChoropleth = function(countryCodes, borrowerCountries, datamapCountrie
   map.updateChoropleth(choropleth);
 };
 
+var createBorrowerInfo = function(loans, amountToLend) {
+    var items = [];
+    // build borrower information
+    items.push('<ul>');
+    items.push(makeBorrowerOption(loans, amountToLend));
+    items.push('</ul>');
+    $('#content').html(items.join(''));
+};
+
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
   var regionValue = $('#filterRegion').val();
@@ -96,14 +105,8 @@ var getData = function() {
   var url = urlChoice(sectorValue, regionValue);
 
   $.getJSON(url, function(data) {
-    var items = [];
-
-    // build borrower information
-    items.push('<ul>');
-    items.push(makeBorrowerOption(data.loans, amountToLend));
-    items.push('</ul>');
-
-    $('#content').html(items.join(''));
+    createBorrowerInfo(data.loans, amountToLend);
+    
     var contentHTML = $('#content').html();
     
     if (contentHTML !== '<ul></ul>') {
@@ -115,9 +118,6 @@ var getData = function() {
       
       createChoropleth(countryCodes, borrowerCountries, datamapCountries);
     } else {
-      // while (contentHTML === '<ul></ul>') {
-      //   //
-      // }
       var page = '&page=' + 2;
       $.getJSON(url + page, function(data) {
         console.log(data);
