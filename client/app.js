@@ -112,11 +112,10 @@ var createBorrowerInfo = function(loans, amountToLend, pageNum) {
 
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
+  var amountToLend = Number($('#amountToDonate').val());
   if (checkAmountToLend(amountToLend)) {
     var regionValue = $('#filterRegion').val();
     var sectorValue = $('#filterSector').val();
-
-    var amountToLend = Number($('#amountToDonate').val());
 
     var contentHTML = '';
     var pageNum = 1;
