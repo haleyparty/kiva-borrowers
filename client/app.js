@@ -1,5 +1,5 @@
 // create URL for getJSON request
-var urlChoice = function(sectorValue, regionValue) {
+var urlChoice = function(sectorValue, regionValue, pageNum) {
   var url;
   if (sectorValue !== '' && regionValue !== '') {
     url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
@@ -10,6 +10,7 @@ var urlChoice = function(sectorValue, regionValue) {
   } else {
     url = 'http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount';
   }
+  url = url + '&page=' + pageNum;
   return url;
 };
 
@@ -87,12 +88,11 @@ var createChoropleth = function(countryCodes, borrowerCountries, datamapCountrie
 };
 
 var createBorrowerInfo = function(loans, amountToLend) {
-    var items = [];
-    // build borrower information
-    items.push('<ul>');
-    items.push(makeBorrowerOption(loans, amountToLend));
-    items.push('</ul>');
-    $('#content').html(items.join(''));
+  var items = [];
+  // build borrower information
+  items.push(makeBorrowerOption(loans, amountToLend));
+  $('#content').html(items.join(''));
+  return;
 };
 
 // grabs sector & region to generate get request for JSON data
@@ -102,27 +102,34 @@ var getData = function() {
 
   var amountToLend = Number($('#amountToDonate').val());
 
-  var url = urlChoice(sectorValue, regionValue);
+  var contentHTML = '';
+  var pageNum = 1;
+  var url = urlChoice(sectorValue, regionValue, pageNum);
 
-  $.getJSON(url, function(data) {
-    createBorrowerInfo(data.loans, amountToLend);
-    
-    var contentHTML = $('#content').html();
-    
-    if (contentHTML !== '<ul></ul>') {
-      // get borrower countries
-      var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans);
-      var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
-      // get 3-char country codes to use in datamap
-      var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
+  var JSONrequest = function(url) {
+    $.getJSON(url, function(data) {
       
-      createChoropleth(countryCodes, borrowerCountries, datamapCountries);
-    } else {
-      var page = '&page=' + 2;
-      $.getJSON(url + page, function(data) {
-        console.log(data);
-      });
-    }
+      createBorrowerInfo(data.loans, amountToLend);
+      contentHTML = $('#content').html();
+      // if contentHTML = '', increment pageNum and continue to next iteration
+      // if (contentHTML === '') {
+      //   break;
+      //   pageNum++;
+      //   url = urlChoice(sectorValue, regionValue, pageNum);
+      // } else {
+        // borrower countries
+        var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans);
+        // all datamap countries listed
+        var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
-  });
+        // get 3-char country codes to use in datamap
+        var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
+        
+        createChoropleth(countryCodes, borrowerCountries, datamapCountries);
+      // }
+    });
+  };
+
+  JSONrequest(url);
+
 };
