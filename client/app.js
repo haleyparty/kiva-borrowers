@@ -100,26 +100,6 @@ var getCountryCodes = function(borrowerCountries, datamapCountries) {
   return countryCodes;
 };
 
-var createChoropleth = function(countryCodes, borrowerCountries, datamapCountries, callThis) {
-  // create choropleth object to inject into map
-  var choropleth = {};
-  for (country in countryCodes) {
-    var countryCode = countryCodes[country];
-    choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
-  }
-
-  // make countries not in countryCodes object the default color
-  if (callThis) {
-    for (var i = 0, j = datamapCountries.length; i < j; i++) {
-      if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
-        var countryCode = datamapCountries[i].id;
-        choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
-      }
-    }
-  }
-  map.updateChoropleth(choropleth);
-};
-
 var createBorrowerInfo = function(loans, amountToLend, pageNum) {
   var items = [];
   // build borrower information
