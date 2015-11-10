@@ -28,8 +28,8 @@ var makeBorrowerOption = function(loans, amountToLend) {
     return items.join('');
 };
 
-// get countries
-var grabCountries = function(loans) {
+// get borrower countries
+var getBorrowerCountries = function(loans) {
   var countries = {};
   $.each(loans, function(index, loan) {
     if (!countries[loan.location.country]) {
@@ -41,6 +41,7 @@ var grabCountries = function(loans) {
   return countries;
 };
 
+// create URL for getJSON request
 var urlChoice = function(sectorValue, regionValue) {
   var url;
   if (sectorValue !== '' && regionValue !== '') {
@@ -57,11 +58,8 @@ var urlChoice = function(sectorValue, regionValue) {
 
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
-  var selectedRegion = document.getElementById('filterRegion');
-  var regionValue = selectedRegion.options[selectedRegion.selectedIndex].value;
-
-  var selectedSector = document.getElementById('filterSector');
-  var sectorValue = selectedSector.options[selectedSector.selectedIndex].value;
+  var regionValue = $('#filterRegion').val();
+  var sectorValue = $('#filterSector').val();
 
   var amountToLend = Number($('#amountToDonate').val());
 
@@ -77,7 +75,7 @@ var getData = function() {
     var contentHTML = $('#content').html();
     if (contentHTML !== '<ul></ul>') {
       // get borrower countries
-      var borrowerCountries = grabCountries(data.loans);
+      var borrowerCountries = getBorrowerCountries(data.loans);
 
       // get 3-char country codes to use in datamap
       var countryCodes = {};
