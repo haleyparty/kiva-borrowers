@@ -20,6 +20,14 @@ h2 {
   font-size: 1.3em;
 }
 
+.imageBlock {
+  display: block;
+}
+
+.detailsBlock {
+  display: inline-block;
+}
+
 .divider {
   border-top:1px solid #0070BB;
   width: auto;
