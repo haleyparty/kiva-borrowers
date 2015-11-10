@@ -55,7 +55,9 @@ var makeBorrowerTemplate = function(loans, amountToLend) {
                 <p><table style="width:50%"> \
                 <tr><td><b>Total Requested:</b></td> <td>$' + loanAmount + '</td></tr> \
                 <tr><td><i>Less: Amount Funded By Others:</i></td> <td><i>$' + fundedAmount + '</i></td></tr> \
+                <tr><td><div class="divider"></div></td><td><div class="divider"></div></td></tr> \
                 <tr><td><b>Amount Remaining to Fund:</b></td> <td>$' + leftToFund + '</td></tr> \
+                <tr><td></td><td></td></tr> \
                 <tr class="highlighted"><td><b>Total Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
                 <tr><td><i>Amount Left Over After Funding:</i> </td> <td><i>$' + leftoverAfterFunding + '</i></td></tr> \
                 </table></p> \
@@ -128,7 +130,6 @@ var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
 var JSONcall = function(url, amountToLend, pageNum) {
   $.getJSON(url, function(data) {
-    console.log(data.loans);
     createBorrowerInfo(data.loans, amountToLend, pageNum);
     contentHTML = $('#content').html();
 
@@ -146,6 +147,14 @@ var JSONcall = function(url, amountToLend, pageNum) {
 
       pageNum++;
       JSONcall(url + '&page=' + pageNum, amountToLend, pageNum);      
+    } else {
+      var callThis = pageNum > 1 ? false : true;
+
+      var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
+
+      var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
+
+      createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
     }
   });
 }
