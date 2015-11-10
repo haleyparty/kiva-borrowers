@@ -13,11 +13,6 @@ fibonacciBackoff.failAfter(10);
 fibonacciBackoff.on('backoff', function(number, delay) {
     // Do something when backoff starts, e.g. show to the
     // user the delay before next reconnection attempt.
-    request('http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount', function(err, res, body) {
-      if (!err && res.statusCode === 200) {
-        console.log(body);
-      }
-    });
     console.log(number + ' ' + delay + 'ms');
 });
 
@@ -26,6 +21,11 @@ fibonacciBackoff.on('ready', function(number, delay) {
     // operation (DNS lookup, API call, etc.). If it fails
     // again then backoff, otherwise reset the backoff
     // instance.
+    request('http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount', function(err, res, body) {
+      if (!err && res.statusCode === 200) {
+        console.log(body);
+      }
+    });
     fibonacciBackoff.backoff();
 });
 

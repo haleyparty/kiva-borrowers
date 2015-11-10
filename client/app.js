@@ -108,15 +108,16 @@ var getData = function() {
 
   var JSONrequest = function(url) {
     $.getJSON(url, function(data) {
-
+      console.log(data.loans)
       createBorrowerInfo(data.loans, amountToLend);
       contentHTML = $('#content').html();
       // if contentHTML = '', increment pageNum and continue to next iteration
       if (contentHTML === '' && pageNum <= 2) {
         pageNum++;
         JSONrequest(url + '&page=' + pageNum);
+      } else if (contentHTML === '') {
+        return;
       } else {
-        console.log(data.loans);
         // borrower countries
         var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans);
         // all datamap countries listed
@@ -127,6 +128,7 @@ var getData = function() {
         
         createChoropleth(countryCodes, borrowerCountries, datamapCountries);
       }
+
     });
   };
 

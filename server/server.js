@@ -28,4 +28,6 @@ function isAuthorized(req, res, next) {
 
 app.listen(port);
 
+module.exports = app;
+
 console.log('Server now listening on port ' + port);
