@@ -145,7 +145,7 @@ var getData = function() {
     var pageNum = 1;
     var url = urlChoice(sectorValue, regionValue, genderValue, pageNum);
 
-
+    var callThis;
     // for now limit is set at 3 page queries
     var JSONrequest = function(url) {
       $.getJSON(url, function(data) {
@@ -156,13 +156,17 @@ var getData = function() {
           createChoropleth({}, {}, datamapCountries, true);
           return;
         } else if (pageNum <= 3) {
-          var callThis = pageNum > 1 ? false : true;
+          // calls certain parts of functions if current query is on first page vs. later
+            // first page of query involves removing previous query's information
+          callThis = pageNum > 1 ? false : true;
+
           // borrower countries
           var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
 
           // get 3-char country codes to use in datamap
           var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
           
+          // create choropleth
           createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
 
           // call for more pages (up to limit allowed by Kiva API)
@@ -175,6 +179,7 @@ var getData = function() {
 
     JSONrequest(url);
   } else {
+    // if user input for amount to lend is invalid
     $('#incorrectInput').text('Please enter a positive number');
     $('#content').html('');
     createChoropleth({}, {}, datamapCountries, true);
