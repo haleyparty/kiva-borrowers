@@ -1,0 +1,22 @@
+h3 {
+  color: #306596;
+}
+
+#box {
+  width: 100%;
+  overflow: hidden;
+}
+
+#content {
+  width: 600px;
+  height: 500px;
+  overflow-y: auto;
+  float: left;
+}
+
+#map {
+  margin-left: 620px;
+  position: absolute;
+  width: 650px;
+  height: 300px;
+}
