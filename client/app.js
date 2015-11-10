@@ -2,8 +2,6 @@
 var makeBorrowerOption = function(loans, amountToLend) {
   var items = [];
   $.each(loans, function(index, loan) {
-    console.log(loan.loan_amount, typeof loan.loan_amount)
-    console.log(loan.funded_amount, typeof loan.funded_amount)
     if (loan.loan_amount - loan.funded_amount > 0) {
       var loanAmount = loan.loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       var fundedAmount = loan.funded_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -43,6 +41,20 @@ var grabCountries = function(loans) {
   return countries;
 };
 
+var urlChoice = function(sectorValue, regionValue) {
+  var url;
+  if (sectorValue !== '' && regionValue !== '') {
+    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
+  } else if (regionValue === '' && sectorValue !== '') {
+    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&sort_by=loan_amount';
+  } else if (sectorValue === '' && regionValue !== '') {
+    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&region=' + regionValue + '&sort_by=loan_amount';
+  } else {
+    url = 'http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount';
+  }
+  return url;
+};
+
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
   var selectedRegion = document.getElementById('filterRegion');
@@ -53,15 +65,7 @@ var getData = function() {
 
   var amountToLend = Number($('#amountToDonate').val());
 
-  if (sectorValue !== '' && regionValue !== '') {
-    var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
-  } else if (regionValue === '' && sectorValue !== '') {
-    var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&sort_by=loan_amount';
-  } else if (sectorValue === '' && regionValue !== '') {
-    var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&region=' + regionValue + '&sort_by=loan_amount';
-  } else {
-    var url = 'http://api.kivaws.org/v1/loans/search.json?sort_by=loan_amount';
-  }
+  var url = urlChoice(sectorValue, regionValue);
 
   $.getJSON(url, function(data) {
     var items = [];
@@ -70,39 +74,48 @@ var getData = function() {
     items.push(makeBorrowerOption(data.loans, amountToLend));
     items.push('</ul>');
     $('#content').html(items.join(''));
+    var contentHTML = $('#content').html();
+    if (contentHTML !== '<ul></ul>') {
+      // get borrower countries
+      var borrowerCountries = grabCountries(data.loans);
 
-
-    // get borrower countries
-    var borrowerCountries = grabCountries(data.loans);
-
-    // get 3-char country codes to use in datamap
-    var countryCodes = {};
-    var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;    
-    for (country in borrowerCountries) {
-      for (var i = 0, j = datamapCountries.length; i < j; i++) {
-        if (datamapCountries[i].properties.name === country) {
-          countryCodes[country] = datamapCountries[i].id;
+      // get 3-char country codes to use in datamap
+      var countryCodes = {};
+      var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;    
+      for (country in borrowerCountries) {
+        for (var i = 0, j = datamapCountries.length; i < j; i++) {
+          if (datamapCountries[i].properties.name === country) {
+            countryCodes[country] = datamapCountries[i].id;
+          }
         }
       }
-    }
-    
-    // create choropleth object to inject into map
-    var choropleth = {};
+      
+      // create choropleth object to inject into map
+      var choropleth = {};
 
-    // highlight the countries in countryCodes object
-    for (country in countryCodes) {
-      var countryCode = countryCodes[country];
-      choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
-    }
-
-    // make countries not in countryCodes object the default color
-    for (var i = 0, j = datamapCountries.length; i < j; i++) {
-      if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
-        var countryCode = datamapCountries[i].id;
-        choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
+      // highlight the countries in countryCodes object
+      for (country in countryCodes) {
+        var countryCode = countryCodes[country];
+        choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
       }
+
+      // make countries not in countryCodes object the default color
+      for (var i = 0, j = datamapCountries.length; i < j; i++) {
+        if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
+          var countryCode = datamapCountries[i].id;
+          choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
+        }
+      }
+      map.updateChoropleth(choropleth);
+    } else {
+      // while (contentHTML === '<ul></ul>') {
+      //   //
+      // }
+      var page = '&page=' + 2;
+      $.getJSON(url + page, function(data) {
+        console.log(data);
+      });
     }
 
-    map.updateChoropleth(choropleth);
   });
 };
