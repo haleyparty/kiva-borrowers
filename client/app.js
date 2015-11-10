@@ -1,3 +1,19 @@
+// add commas as user types in input
+$('#userInputToLend').keyup(function(event) {
+
+  // skip for arrow keys and backspace
+  if(event.which >= 37 && event.which <= 40) return;
+
+  // format number
+  $(this).val(function(index, value) {
+    return value
+    .replace(/\D/g, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+});
+
+// validate that user input is a positive number
 var checkAmountToLend = function(amountToLend) {
   return amountToLend > 0;
 };
@@ -114,7 +130,10 @@ var getData = function() {
   if ($('#incorrectInput').text()) {
     $('#incorrectInput').text('');
   }
-  var amountToLend = Number($('#amountToDonate').val());
+
+  // take commas that were inserted into user input out, convert to float
+  var amountToLend = parseFloat($('#userInputToLend').val().replace(/,/g, ''));
+
   // all datamap countries listed
   var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
   if (checkAmountToLend(amountToLend)) {
@@ -133,10 +152,7 @@ var getData = function() {
         createBorrowerInfo(data.loans, amountToLend, pageNum);
         contentHTML = $('#content').html();
         // if contentHTML = '', increment pageNum and continue to next iteration
-        if (contentHTML === '' && pageNum <= 2) {
-          pageNum++;
-          JSONrequest(url + '&page=' + pageNum);
-        } else if (contentHTML === '') {
+        if (contentHTML === '') {
           createChoropleth({}, {}, datamapCountries, true);
           return;
         } else if (pageNum <= 3) {

@@ -2,15 +2,15 @@
 <html ng-app='kiva'>
   <head>
     <meta charset="utf-8" />
-    <title>Kiva Borrowers</title>
+    <title>High-Impact Kiva Loans</title>
 
     <link href='assets/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
     <link href='style.css' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <h1>Kiva: Where Lending has the Largest Impact</h1>
+    <h1>High-Impact Kiva Loans</h1>
     <p>
-      <b>Amount to Lend:</b> <input type='text' id='amountToDonate'> <span id='incorrectInput'></span>
+      <b>Amount to Lend:</b> <input type='text' id='userInputToLend'> <span id='incorrectInput'></span>
     </p>
     <p>
       <select id='filterSector'>
@@ -45,7 +45,7 @@
 
       <input type='checkbox' id='checkBox'>Female
     </p>
-    
+
     <p>
       <button id='submitButton' onclick='getData();'>Submit</button>
     </p>
