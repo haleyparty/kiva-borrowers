@@ -19,7 +19,7 @@ var makeBorrowerOption = function(loans, amountToLend) {
                 <p><b>Amount Requested:</b> $' + loanAmount + '<br> \
                 <b>Amount Funded So Far:</b> $' + fundedAmount + '<br> \
                 <b>Amount Left to Fund:</b> $' + leftToFund + '<br> \
-                <b>Percentage of Contribution: </b>' + contributionPercentage + '%<br> \
+                <b>Contribution Percentage: </b>' + contributionPercentage + '%<br> \
                 <div class="divider"></div>'
                 );
   });

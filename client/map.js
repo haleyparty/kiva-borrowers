@@ -11,8 +11,9 @@ var map = new Datamap({
     popupTemplate: function(geo, data) {
       return ['<div class="hoverinfo"><strong>',
               'Number of borrowers in ' + geo.properties.name,
-              ': ' + data.countryCount,
+              'with this query: ' + data.countryCount,
               '</strong></div>'].join('');
     }
   }
 });
+
