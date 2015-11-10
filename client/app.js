@@ -47,9 +47,9 @@ var makeBorrowerOption = function(loans, amountToLend) {
 var countries = {};
 // get borrower country names and count for the query
 var getBorrowerCountryNamesAndCount = function(loans, callThis) {
-  // if (callThis) {
-    // var countries = {};
-  // }
+  if (callThis) {
+    countries = {};
+  }
   $.each(loans, function(index, loan) {
     if (!countries[loan.location.country]) {
       countries[loan.location.country] = 1;
