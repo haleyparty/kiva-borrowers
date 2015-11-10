@@ -11,7 +11,7 @@ var map = new Datamap({
     popupTemplate: function(geo, data) {
       if (data) {
         return ['<div class="hoverinfo"><strong>',
-                'Number of borrowers in ' + geo.properties.name,
+                'Total borrowers in ' + geo.properties.name,
                 ' with this query: ' + data.countryCount,
                 '</strong></div>'].join('');
       } else {
