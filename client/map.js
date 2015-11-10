@@ -9,7 +9,7 @@ var map = new Datamap({
   },
   geographyConfig: {
     popupTemplate: function(geo, data) {
-      if (data !== null) {
+      if (data) {
         return ['<div class="hoverinfo"><strong>',
                 'Number of borrowers in ' + geo.properties.name,
                 ' with this query: ' + data.countryCount,
