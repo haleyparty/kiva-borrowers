@@ -116,6 +116,8 @@ var getData = function() {
     $('#incorrectInput').text('');
   }
   var amountToLend = Number($('#amountToDonate').val());
+  // all datamap countries listed
+  var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
   if (checkAmountToLend(amountToLend)) {
     var regionValue = $('#filterRegion').val();
     var sectorValue = $('#filterSector').val();
@@ -124,8 +126,6 @@ var getData = function() {
     var pageNum = 1;
     var url = urlChoice(sectorValue, regionValue, pageNum);
 
-    // all datamap countries listed
-    var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
     // for now limit is set at 3 page queries
     var JSONrequest = function(url) {
@@ -160,5 +160,7 @@ var getData = function() {
     JSONrequest(url);
   } else {
     $('#incorrectInput').text('Please enter a positive number');
+    $('#content').html('');
+    createChoropleth({}, {}, datamapCountries, true);
   }
 };
