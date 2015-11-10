@@ -41,3 +41,7 @@ h2 {
   width: 650px;
   height: 400px;
 }
+
+#incorrectInput {
+  color: red;
+}

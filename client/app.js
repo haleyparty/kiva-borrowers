@@ -112,6 +112,9 @@ var createBorrowerInfo = function(loans, amountToLend, pageNum) {
 
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
+  if ($('#incorrectInput').text()) {
+    $('#incorrectInput').text('');
+  }
   var amountToLend = Number($('#amountToDonate').val());
   if (checkAmountToLend(amountToLend)) {
     var regionValue = $('#filterRegion').val();
@@ -156,6 +159,6 @@ var getData = function() {
 
     JSONrequest(url);
   } else {
-    alert('Invalid input');
+    $('#incorrectInput').text('Please enter a positive number');
   }
 };
