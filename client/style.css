@@ -22,6 +22,10 @@ h2 {
   display: inline;
 }
 
+.highlighted {
+  background-color: yellow;
+}
+
 .divider {
   border-top:1px solid #0070BB;
   width: auto;

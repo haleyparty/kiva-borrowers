@@ -56,7 +56,7 @@ var makeBorrowerOption = function(loans, amountToLend) {
                 <tr><td><b>Total Requested:</b></td> <td>$' + loanAmount + '</td></tr> \
                 <tr><td><i>Less: Amount Funded So Far:</i></td> <td><i>$' + fundedAmount + '</i></td></tr> \
                 <tr><td><b>Amount Remaining to Fund:</b></td> <td>$' + leftToFund + '</td></tr> \
-                <tr><td><b>Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
+                <tr class="highlighted"><td><b>Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
                 <tr><td><i>Amount Left Over After Funding:</i> </td> <td><i>$' + leftoverAfterFunding + '</i></td></tr> \
                 </table></p> \
                 <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '<br> \
