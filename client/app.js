@@ -44,9 +44,12 @@ var makeBorrowerOption = function(loans, amountToLend) {
     return items.join('');
 };
 
+var countries = {};
 // get borrower country names and count for the query
-var getBorrowerCountryNamesAndCount = function(loans) {
-  var countries = {};
+var getBorrowerCountryNamesAndCount = function(loans, callThis) {
+  // if (callThis) {
+    // var countries = {};
+  // }
   $.each(loans, function(index, loan) {
     if (!countries[loan.location.country]) {
       countries[loan.location.country] = 1;
@@ -69,19 +72,24 @@ var getCountryCodes = function(borrowerCountries, datamapCountries) {
   return countryCodes;
 };
 
-var createChoropleth = function(countryCodes, borrowerCountries, datamapCountries) {
+var createChoropleth = function(countryCodes, borrowerCountries, datamapCountries, callThis) {
   // create choropleth object to inject into map
   var choropleth = {};
   for (country in countryCodes) {
     var countryCode = countryCodes[country];
+    console.log(country, borrowerCountries[country]);
     choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
   }
 
+  console.log(map)
+
   // make countries not in countryCodes object the default color
-  for (var i = 0, j = datamapCountries.length; i < j; i++) {
-    if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
-      var countryCode = datamapCountries[i].id;
-      choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
+  if (callThis) {
+    for (var i = 0, j = datamapCountries.length; i < j; i++) {
+      if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
+        var countryCode = datamapCountries[i].id;
+        choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
+      }
     }
   }
   map.updateChoropleth(choropleth);
@@ -91,7 +99,7 @@ var createBorrowerInfo = function(loans, amountToLend) {
   var items = [];
   // build borrower information
   items.push(makeBorrowerOption(loans, amountToLend));
-  $('#content').html(items.join(''));
+  $('#content').append(items.join(''));
   return;
 };
 
@@ -108,7 +116,6 @@ var getData = function() {
 
   var JSONrequest = function(url) {
     $.getJSON(url, function(data) {
-      console.log(data.loans)
       createBorrowerInfo(data.loans, amountToLend);
       contentHTML = $('#content').html();
       // if contentHTML = '', increment pageNum and continue to next iteration
@@ -117,16 +124,21 @@ var getData = function() {
         JSONrequest(url + '&page=' + pageNum);
       } else if (contentHTML === '') {
         return;
-      } else {
+      } else if (pageNum <= 3) {
+        var callThis = pageNum > 1 ? false : true;
         // borrower countries
-        var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans);
+        var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
         // all datamap countries listed
         var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
         // get 3-char country codes to use in datamap
         var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
         
-        createChoropleth(countryCodes, borrowerCountries, datamapCountries);
+        createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
+
+        // call for more pages (up to limit allowed by Kiva API)
+        pageNum++;
+        JSONrequest(url + '&page=' + pageNum);
       }
 
     });
