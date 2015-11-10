@@ -14,34 +14,6 @@ var urlChoice = function(sectorValue, regionValue, genderValue, pageNum) {
   return url;
 };
 
-var countries = {};
-// get borrower country names and count for the query
-var getBorrowerCountryNamesAndCount = function(loans, callThis) {
-  if (callThis) {
-    countries = {};
-  }
-  $.each(loans, function(index, loan) {
-    if (!countries[loan.location.country]) {
-      countries[loan.location.country] = 1;
-    } else {
-      countries[loan.location.country]++;
-    }
-  });
-  return countries;
-};
-
-var getCountryCodes = function(borrowerCountries, datamapCountries) {
-  var countryCodes = {};
-  for (country in borrowerCountries) {
-    for (var i = 0, j = datamapCountries.length; i < j; i++) {
-      if (datamapCountries[i].properties.name === country) {
-        countryCodes[country] = datamapCountries[i].id;
-      }
-    }
-  }
-  return countryCodes;
-};
-
 var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
 var JSONcall = function(url, amountToLend, pageNum) {
