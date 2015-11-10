@@ -12,7 +12,7 @@ var map = new Datamap({
       if (data) {
         return ['<div class="hoverinfo"><strong>',
                 'Total borrowers in ' + geo.properties.name,
-                ' with this query: ' + data.countryCount,
+                ': ' + data.countryCount,
                 '</strong></div>'].join('');
       } else {
         return ['<div class="hoverinfo"><strong>',
