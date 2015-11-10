@@ -6,15 +6,15 @@ var checkAmountToLend = function(amountToLend) {
 var urlChoice = function(sectorValue, regionValue, genderValue, pageNum) {
   var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sort_by=loan_amount';
   if (sectorValue !== '') {
-    url = url + '&sector=' + sectorValue;
+    url += '&sector=' + sectorValue;
   }
   if (regionValue !== '') {
-    url = url + '&region=' + regionValue;
+    url += '&region=' + regionValue;
   }
   if (genderValue) {
-    url = url + '&gender=female';
+    url += '&gender=female';
   }
-  url = url + '&page=' + pageNum;
+  url += '&page=' + pageNum;
   return url;
 };
 
