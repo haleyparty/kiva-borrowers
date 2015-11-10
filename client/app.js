@@ -68,6 +68,24 @@ var getCountryCodes = function(borrowerCountries, datamapCountries) {
   return countryCodes;
 };
 
+var createChoropleth = function(countryCodes, borrowerCountries, datamapCountries) {
+  // create choropleth object to inject into map
+  var choropleth = {};
+  for (country in countryCodes) {
+    var countryCode = countryCodes[country];
+    choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
+  }
+
+  // make countries not in countryCodes object the default color
+  for (var i = 0, j = datamapCountries.length; i < j; i++) {
+    if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
+      var countryCode = datamapCountries[i].id;
+      choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
+    }
+  }
+  map.updateChoropleth(choropleth);
+};
+
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
   var regionValue = $('#filterRegion').val();
@@ -95,23 +113,7 @@ var getData = function() {
       // get 3-char country codes to use in datamap
       var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
       
-      // create choropleth object to inject into map
-      var choropleth = {};
-
-      // highlight the countries in countryCodes object
-      for (country in countryCodes) {
-        var countryCode = countryCodes[country];
-        choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
-      }
-
-      // make countries not in countryCodes object the default color
-      for (var i = 0, j = datamapCountries.length; i < j; i++) {
-        if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
-          var countryCode = datamapCountries[i].id;
-          choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
-        }
-      }
-      map.updateChoropleth(choropleth);
+      createChoropleth(countryCodes, borrowerCountries, datamapCountries);
     } else {
       // while (contentHTML === '<ul></ul>') {
       //   //
