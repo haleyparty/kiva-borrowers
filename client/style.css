@@ -3,13 +3,10 @@ body {
 }
 
 img {
-  float: left;
+  float: right;
   vertical-align: text-top;
   margin: 5px;
   margin-top: 12px;
-}
-
-a {
 }
 
 h1, h2, b {
@@ -18,14 +15,7 @@ h1, h2, b {
 
 h2 {
   font-size: 1.3em;
-}
-
-.imageBlock {
-  display: block;
-}
-
-.detailsBlock {
-  display: inline-block;
+  display: inline;
 }
 
 .divider {

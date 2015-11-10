@@ -1,3 +1,7 @@
+var checkAmountToLend = function(amountToLend) {
+  return amountToLend > 0;
+};
+
 // create URL for getJSON request
 var urlChoice = function(sectorValue, regionValue, pageNum) {
   var url;
@@ -31,17 +35,18 @@ var makeBorrowerOption = function(loans, amountToLend) {
         contributionPercentage = 100;
       }
 
-      items.push('<div class="imageBlock"><img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
-                  <h2>' + loan.name + '</h2> \
-                  <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p> \
-                  <p><b>Amount Requested:</b> $' + loanAmount + '<br> \
-                  <i>Less: Amount Funded So Far: $' + fundedAmount + '</i><br> \
-                  <b>Amount Left to Fund:</b> $' + leftToFund + '<br> \
-                  <b>Contribution Percentage: </b>' + contributionPercentage + '%<br> \
-                  <b>Amount Left Over After Funding: </b> $' + leftoverAfterFunding + '</p></div> \
-                  <div class="detailsBlock"><p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '<br> \
+      items.push('<img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
+                  <h2>' + loan.name + '</h2>: <a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a> \
+                  <p><table style="width:50%"> \
+                  <tr><td><b>Total Requested:</b></td> <td>$' + loanAmount + '</td></tr> \
+                  <tr><td><i>Less: Amount Funded So Far:</i></td> <td><i>$' + fundedAmount + '</i></td></tr> \
+                  <tr><td><b>Amount Remaining to Fund:</b></td> <td>$' + leftToFund + '</td></tr> \
+                  <tr><td><b>Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
+                  <tr><td><b>Amount Left Over After Funding: </b></td> <td>$' + leftoverAfterFunding + '</td></tr> \
+                  </table></p> \
+                  <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '<br> \
                   <b>Activity:</b> ' + loan.activity + '<br> \
-                  <b>Use:</b> ' + loan.use + '</p></div> \
+                  <b>Use:</b> ' + loan.use + '</p> \
                   <div class="divider"></div>'
                   );
       }
@@ -107,48 +112,51 @@ var createBorrowerInfo = function(loans, amountToLend, pageNum) {
 
 // grabs sector & region to generate get request for JSON data
 var getData = function() {
-  var regionValue = $('#filterRegion').val();
-  var sectorValue = $('#filterSector').val();
+  if (checkAmountToLend(amountToLend)) {
+    var regionValue = $('#filterRegion').val();
+    var sectorValue = $('#filterSector').val();
 
-  var amountToLend = Number($('#amountToDonate').val());
+    var amountToLend = Number($('#amountToDonate').val());
 
-  var contentHTML = '';
-  var pageNum = 1;
-  var url = urlChoice(sectorValue, regionValue, pageNum);
+    var contentHTML = '';
+    var pageNum = 1;
+    var url = urlChoice(sectorValue, regionValue, pageNum);
 
-  // all datamap countries listed
-  var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
+    // all datamap countries listed
+    var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
-  // for now limit is set at 3 page queries
-  var JSONrequest = function(url) {
-    $.getJSON(url, function(data) {
-      createBorrowerInfo(data.loans, amountToLend, pageNum);
-      contentHTML = $('#content').html();
-      // if contentHTML = '', increment pageNum and continue to next iteration
-      if (contentHTML === '' && pageNum <= 2) {
-        pageNum++;
-        JSONrequest(url + '&page=' + pageNum);
-      } else if (contentHTML === '') {
-        createChoropleth({}, {}, datamapCountries, true);
-        return;
-      } else if (pageNum <= 3) {
-        var callThis = pageNum > 1 ? false : true;
-        // borrower countries
-        var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
+    // for now limit is set at 3 page queries
+    var JSONrequest = function(url) {
+      $.getJSON(url, function(data) {
+        createBorrowerInfo(data.loans, amountToLend, pageNum);
+        contentHTML = $('#content').html();
+        // if contentHTML = '', increment pageNum and continue to next iteration
+        if (contentHTML === '' && pageNum <= 2) {
+          pageNum++;
+          JSONrequest(url + '&page=' + pageNum);
+        } else if (contentHTML === '') {
+          createChoropleth({}, {}, datamapCountries, true);
+          return;
+        } else if (pageNum <= 3) {
+          var callThis = pageNum > 1 ? false : true;
+          // borrower countries
+          var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
 
-        // get 3-char country codes to use in datamap
-        var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
-        
-        createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
+          // get 3-char country codes to use in datamap
+          var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
+          
+          createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
 
-        // call for more pages (up to limit allowed by Kiva API)
-        pageNum++;
-        JSONrequest(url + '&page=' + pageNum);
-      }
+          // call for more pages (up to limit allowed by Kiva API)
+          pageNum++;
+          JSONrequest(url + '&page=' + pageNum);
+        }
 
-    });
-  };
+      });
+    };
 
-  JSONrequest(url);
-
+    JSONrequest(url);
+  } else {
+    alert('Invalid input');
+  }
 };
