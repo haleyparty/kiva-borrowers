@@ -92,11 +92,11 @@ var createChoropleth = function(countryCodes, borrowerCountries, datamapCountrie
   map.updateChoropleth(choropleth);
 };
 
-var createBorrowerInfo = function(loans, amountToLend) {
+var createBorrowerInfo = function(loans, amountToLend, pageNum) {
   var items = [];
   // build borrower information
   items.push(makeBorrowerOption(loans, amountToLend));
-  $('#content').append(items.join(''));
+  pageNum > 1 ? $('#content').append(items.join('')) : $('#content').html(items.join(''));
   return;
 };
 
@@ -114,7 +114,7 @@ var getData = function() {
   // for now limit is set at 3 page queries
   var JSONrequest = function(url) {
     $.getJSON(url, function(data) {
-      createBorrowerInfo(data.loans, amountToLend);
+      createBorrowerInfo(data.loans, amountToLend, pageNum);
       contentHTML = $('#content').html();
       // if contentHTML = '', increment pageNum and continue to next iteration
       if (contentHTML === '' && pageNum <= 2) {
