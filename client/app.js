@@ -56,8 +56,6 @@ var getData = function() {
   // take commas that were inserted into user input out, convert to float
   var amountToLend = parseFloat($('#userInputToLend').val().replace(/,/g, ''));
 
-  // all datamap countries listed
-  var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
   if (checkAmountToLend(amountToLend)) {
     var regionValue = $('#filterRegion').val();
     var sectorValue = $('#filterSector').val();
