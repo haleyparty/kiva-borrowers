@@ -5,7 +5,7 @@ var map = new Datamap({
     borrowerLivesIn: '#306596'
   },
   data: {
-    // this will be filled upon each submit click
+    // this will be filled upon each submit click (which will call createChoropleth)
   },
   geographyConfig: {
     popupTemplate: function(geo, data) {
