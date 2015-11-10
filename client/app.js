@@ -6,17 +6,21 @@ var makeBorrowerOption = function(loans, amountToLend) {
     var fundedAmount = loan.funded_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     var leftToFund = (loan.loan_amount - loan.funded_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     var contributionPercentage = Math.round((amountToLend / loan.loan_amount) * 100);
+    if (contributionPercentage > 100) {
+      contributionPercentage = 100;
+    }
 
     items.push('<img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
-                <h3>' + loan.name + '</h3> \
+                <h2>' + loan.name + '</h2> \
                 <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p> \
-                <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '</p> \
-                <p><b>Activity:</b> ' + loan.activity + '</p> \
-                <p><b>Use:</b> ' + loan.use + '</p> \
-                <p><b>Amount Requested:</b> $' + loanAmount + '</p> \
-                <p><b>Amount Funded So Far:</b> $' + fundedAmount + '</p> \
-                <p><b>Amount Left to Fund:</b> $' + leftToFund + '</p> \
-                <p><b>Percentage of Contribution: </b>' + contributionPercentage + '%</p>'
+                <b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '<br> \
+                <b>Activity:</b> ' + loan.activity + '<br> \
+                <b>Use:</b> ' + loan.use + '</p> \
+                <p><b>Amount Requested:</b> $' + loanAmount + '<br> \
+                <b>Amount Funded So Far:</b> $' + fundedAmount + '<br> \
+                <b>Amount Left to Fund:</b> $' + leftToFund + '<br> \
+                <b>Percentage of Contribution: </b>' + contributionPercentage + '%<br> \
+                <div class="divider"></div>'
                 );
   });
   return items.join('');
