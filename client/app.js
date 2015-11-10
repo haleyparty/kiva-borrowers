@@ -4,15 +4,12 @@ var checkAmountToLend = function(amountToLend) {
 
 // create URL for getJSON request
 var urlChoice = function(sectorValue, regionValue, pageNum) {
-  var url;
-  if (sectorValue !== '' && regionValue !== '') {
-    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
-  } else if (regionValue === '' && sectorValue !== '') {
-    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&sort_by=loan_amount';
-  } else if (sectorValue === '' && regionValue !== '') {
-    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&region=' + regionValue + '&sort_by=loan_amount';
-  } else {
-    url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sort_by=loan_amount';
+  var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sort_by=loan_amount';
+  if (sectorValue !== '') {
+    url = url + '&sector=' + sectorValue;
+  }
+  if (regionValue !== '') {
+    url = url + '&region=' + regionValue;
   }
   url = url + '&page=' + pageNum;
   return url;
