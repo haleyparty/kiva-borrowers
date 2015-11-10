@@ -27,6 +27,7 @@ var makeBorrowerOption = function(loans, amountToLend) {
     var leftToFund = (loan.loan_amount - loan.funded_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     var leftoverAfterFunding = (amountToLend > leftToFund) ? (amountToLend - leftToFund) : 0;
+    leftoverAfterFunding = leftoverAfterFunding.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     var contributionPercentage = Math.round((amountToLend / loan.loan_amount) * 100);
 
