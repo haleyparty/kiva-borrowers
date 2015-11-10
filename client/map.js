@@ -9,10 +9,16 @@ var map = new Datamap({
   },
   geographyConfig: {
     popupTemplate: function(geo, data) {
-      return ['<div class="hoverinfo"><strong>',
-              'Number of borrowers in ' + geo.properties.name,
-              ' with this query: ' + data.countryCount,
-              '</strong></div>'].join('');
+      if (data !== null) {
+        return ['<div class="hoverinfo"><strong>',
+                'Number of borrowers in ' + geo.properties.name,
+                ' with this query: ' + data.countryCount,
+                '</strong></div>'].join('');
+      } else {
+        return ['<div class="hoverinfo"><strong>',
+                geo.properties.name,
+                '</strong></div>'].join('');
+      }
     }
   }
 });
