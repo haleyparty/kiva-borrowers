@@ -3,13 +3,16 @@ var checkAmountToLend = function(amountToLend) {
 };
 
 // create URL for getJSON request
-var urlChoice = function(sectorValue, regionValue, pageNum) {
+var urlChoice = function(sectorValue, regionValue, genderValue, pageNum) {
   var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sort_by=loan_amount';
   if (sectorValue !== '') {
     url = url + '&sector=' + sectorValue;
   }
   if (regionValue !== '') {
     url = url + '&region=' + regionValue;
+  }
+  if (genderValue) {
+    url = url + '&gender=female';
   }
   url = url + '&page=' + pageNum;
   return url;
@@ -117,10 +120,11 @@ var getData = function() {
   if (checkAmountToLend(amountToLend)) {
     var regionValue = $('#filterRegion').val();
     var sectorValue = $('#filterSector').val();
+    var genderValue = $('#checkBox').is(':checked');
 
     var contentHTML = '';
     var pageNum = 1;
-    var url = urlChoice(sectorValue, regionValue, pageNum);
+    var url = urlChoice(sectorValue, regionValue, genderValue, pageNum);
 
 
     // for now limit is set at 3 page queries
