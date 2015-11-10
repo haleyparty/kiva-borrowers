@@ -111,6 +111,9 @@ var getData = function() {
   var pageNum = 1;
   var url = urlChoice(sectorValue, regionValue, pageNum);
 
+  // all datamap countries listed
+  var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
+
   // for now limit is set at 3 page queries
   var JSONrequest = function(url) {
     $.getJSON(url, function(data) {
@@ -121,13 +124,12 @@ var getData = function() {
         pageNum++;
         JSONrequest(url + '&page=' + pageNum);
       } else if (contentHTML === '') {
+        createChoropleth({}, {}, datamapCountries, true);
         return;
       } else if (pageNum <= 3) {
         var callThis = pageNum > 1 ? false : true;
         // borrower countries
         var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
-        // all datamap countries listed
-        var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
         // get 3-char country codes to use in datamap
         var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
