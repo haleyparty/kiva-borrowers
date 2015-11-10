@@ -77,11 +77,8 @@ var createChoropleth = function(countryCodes, borrowerCountries, datamapCountrie
   var choropleth = {};
   for (country in countryCodes) {
     var countryCode = countryCodes[country];
-    console.log(country, borrowerCountries[country]);
     choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
   }
-
-  console.log(map)
 
   // make countries not in countryCodes object the default color
   if (callThis) {
