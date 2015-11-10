@@ -1,10 +1,11 @@
 // put borrowers onto page (20 max, sorted by loan amount)
-var makeBorrowerOption = function(loans) {
+var makeBorrowerOption = function(loans, amountToLend) {
   var items = [];
   $.each(loans, function(index, loan) {
     var loanAmount = loan.loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     var fundedAmount = loan.funded_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     var leftToFund = (loan.loan_amount - loan.funded_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var contributionPercentage = Math.round((amountToLend / loan.loan_amount) * 100);
 
     items.push('<img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
                 <h3>' + loan.name + '</h3> \
@@ -14,7 +15,8 @@ var makeBorrowerOption = function(loans) {
                 <p><b>Use:</b> ' + loan.use + '</p> \
                 <p><b>Amount Requested:</b> $' + loanAmount + '</p> \
                 <p><b>Amount Funded So Far:</b> $' + fundedAmount + '</p> \
-                <p><b>Amount Left to Fund:</b> $' + leftToFund + '</p>'
+                <p><b>Amount Left to Fund:</b> $' + leftToFund + '</p> \
+                <p><b>Percentage of Contribution: </b>' + contributionPercentage + '%</p>'
                 );
   });
   return items.join('');
@@ -41,6 +43,8 @@ var getData = function() {
   var selectedSector = document.getElementById('filterSector');
   var sectorValue = selectedSector.options[selectedSector.selectedIndex].value;
 
+  var amountToLend = Number($('#amountToDonate').val());
+
   if (sectorValue !== '' && regionValue !== '') {
     var url = 'http://api.kivaws.org/v1/loans/search.json?status=fundraising&sector=' + sectorValue + '&region=' + regionValue + '&sort_by=loan_amount';
   } else if (regionValue === '' && sectorValue !== '') {
@@ -55,7 +59,7 @@ var getData = function() {
     var items = [];
     // build borrower information
     items.push('<ul>');
-    items.push(makeBorrowerOption(data.loans));
+    items.push(makeBorrowerOption(data.loans, amountToLend));
     items.push('</ul>');
     $('#content').html(items.join(''));
 
