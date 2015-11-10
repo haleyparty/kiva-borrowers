@@ -13,7 +13,7 @@ var makeBorrowerOption = function(loans) {
                 <p><b>Activity:</b> ' + loan.activity + '</p> \
                 <p><b>Use:</b> ' + loan.use + '</p> \
                 <p><b>Amount Requested:</b> $' + loanAmount + '</p> \
-                <p style="text-indent: 1em"><i>Amount Funded So Far: $' + fundedAmount + '</i></p> \
+                <p><b>Amount Funded So Far:</b> $' + fundedAmount + '</p> \
                 <p><b>Amount Left to Fund:</b> $' + leftToFund + '</p>'
                 );
   });
@@ -86,9 +86,10 @@ var getData = function() {
     for (var i = 0, j = datamapCountries.length; i < j; i++) {
       if (!(datamapCountries[i].id in choropleth) && datamapCountries[i].id !== '-99') {
         var countryCode = datamapCountries[i].id;
-        choropleth[countryCode] = {fillKey: 'defaultFill'};
+        choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
       }
     }
+    console.log(choropleth)
 
     map.updateChoropleth(choropleth);
   });
