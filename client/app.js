@@ -111,6 +111,7 @@ var getData = function() {
   var pageNum = 1;
   var url = urlChoice(sectorValue, regionValue, pageNum);
 
+  // for now limit is set at 3 page queries
   var JSONrequest = function(url) {
     $.getJSON(url, function(data) {
       createBorrowerInfo(data.loans, amountToLend);
