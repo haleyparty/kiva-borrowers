@@ -2,23 +2,19 @@
 var makeBorrowerOption = function(loans) {
   var items = [];
   $.each(loans, function(index, loan) {
-    console.log(loan);
-    items.push('<table style="width:100%"> \
-                <tr> \
-                <td> \
+    var loanAmount = loan.loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var fundedAmount = loan.funded_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var leftToFund = (loan.loan_amount - loan.funded_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    items.push('<img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
                 <h3>' + loan.name + '</h3> \
+                <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p> \
                 <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '</p> \
                 <p><b>Activity:</b> ' + loan.activity + '</p> \
                 <p><b>Use:</b> ' + loan.use + '</p> \
-                <p><b>Amount Requested:</b> $' + loan.loan_amount + '</p> \
-                <p><i>Amount Funded So Far: $' + loan.funded_amount + '</i></p> \
-                <p><b>Amount Left to Fund:</b> $' + (loan.loan_amount - loan.funded_amount) + '</p> \
-                <p><a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a></p> \
-                </td> \
-                <tr> \
-                <img src="http://www.kiva.org/img/w200h200/' + loan.image.id + '.jpg"> \
-                </tr> \
-                </table>'
+                <p><b>Amount Requested:</b> $' + loanAmount + '</p> \
+                <p style="text-indent: 1em"><i>Amount Funded So Far: $' + fundedAmount + '</i></p> \
+                <p><b>Amount Left to Fund:</b> $' + leftToFund + '</p>'
                 );
   });
   return items.join('');
@@ -55,7 +51,7 @@ var getData = function() {
 
   $.getJSON(url, function(data) {
     var items = [];
-    // build list
+    // build borrower information
     items.push('<ul>');
     items.push(makeBorrowerOption(data.loans));
     items.push('</ul>');

@@ -1,5 +1,7 @@
-h3 {
-  color: #306596;
+img {
+  float: left;
+  vertical-align: text-top;
+  margin: 5px;
 }
 
 #box {
