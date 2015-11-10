@@ -9,8 +9,12 @@ img {
   margin-top: 12px;
 }
 
-h1, h2, b {
+h2, b {
   color: #306596;
+}
+
+h1 {
+  color: #93D490;
 }
 
 h2 {
