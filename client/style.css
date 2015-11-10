@@ -31,6 +31,11 @@ h2 {
   width: auto;
 }
 
+#selectHeader {
+  background-color: #ABDDA4;
+  text-align: center;
+}
+
 #box {
   width: 100%;
   overflow: hidden;

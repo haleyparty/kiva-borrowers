@@ -1,5 +1,5 @@
 // put borrowers onto page (20 max, sorted by loan amount)
-var makeBorrowerTemplate = function(loans, amountToLend) {
+var makeBorrowerTemplate = function(loans, amountToLend, pageNum) {
   var items = [];
   $.each(loans, function(index, loan) {
     var loanAmount = loan.loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -34,7 +34,8 @@ var makeBorrowerTemplate = function(loans, amountToLend) {
                 <div class="divider"></div>'
                 );
     });
-    return items.join('');
+
+    pageNum > 1 ? $('#content').append(items.join('')) : $('#content').html(items.join(''));
 };
 
 var countries = {};
@@ -53,6 +54,7 @@ var getBorrowerCountryNamesAndCount = function(loans, callThis) {
   return countries;
 };
 
+// get 3-digit country codes for d3
 var getCountryCodes = function(borrowerCountries, datamapCountries) {
   var countryCodes = {};
   for (country in borrowerCountries) {
@@ -63,12 +65,4 @@ var getCountryCodes = function(borrowerCountries, datamapCountries) {
     }
   }
   return countryCodes;
-};
-
-var createBorrowerInfo = function(loans, amountToLend, pageNum) {
-  var items = [];
-  // build borrower information
-  items.push(makeBorrowerTemplate(loans, amountToLend));
-  pageNum > 1 ? $('#content').append(items.join('')) : $('#content').html(items.join(''));
-  return;
 };

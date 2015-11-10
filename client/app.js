@@ -18,7 +18,7 @@ var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;
 
 var JSONcall = function(url, amountToLend, pageNum) {
   $.getJSON(url, function(data) {
-    createBorrowerInfo(data.loans, amountToLend, pageNum);
+    makeBorrowerTemplate(data.loans, amountToLend, pageNum);
     contentHTML = $('#content').html();
 
     if (contentHTML === '') {
