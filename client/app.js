@@ -34,7 +34,7 @@ var urlChoice = function(sectorValue, regionValue, genderValue, pageNum) {
 };
 
 // put borrowers onto page (20 max, sorted by loan amount)
-var makeBorrowerOption = function(loans, amountToLend) {
+var makeBorrowerTemplate = function(loans, amountToLend) {
   var items = [];
   $.each(loans, function(index, loan) {
     var loanAmount = loan.loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -54,9 +54,9 @@ var makeBorrowerOption = function(loans, amountToLend) {
                 <h2>' + loan.name + '</h2>: <a href="http://www.kiva.org/lend/' + loan.id + '?app_id=' + loan.id + '" target="_blank">Lend</a> \
                 <p><table style="width:50%"> \
                 <tr><td><b>Total Requested:</b></td> <td>$' + loanAmount + '</td></tr> \
-                <tr><td><i>Less: Amount Funded So Far:</i></td> <td><i>$' + fundedAmount + '</i></td></tr> \
+                <tr><td><i>Less: Amount Funded By Others:</i></td> <td><i>$' + fundedAmount + '</i></td></tr> \
                 <tr><td><b>Amount Remaining to Fund:</b></td> <td>$' + leftToFund + '</td></tr> \
-                <tr class="highlighted"><td><b>Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
+                <tr class="highlighted"><td><b>Total Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
                 <tr><td><i>Amount Left Over After Funding:</i> </td> <td><i>$' + leftoverAfterFunding + '</i></td></tr> \
                 </table></p> \
                 <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '<br> \
@@ -119,7 +119,7 @@ var createChoropleth = function(countryCodes, borrowerCountries, datamapCountrie
 var createBorrowerInfo = function(loans, amountToLend, pageNum) {
   var items = [];
   // build borrower information
-  items.push(makeBorrowerOption(loans, amountToLend));
+  items.push(makeBorrowerTemplate(loans, amountToLend));
   pageNum > 1 ? $('#content').append(items.join('')) : $('#content').html(items.join(''));
   return;
 };
