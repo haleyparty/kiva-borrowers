@@ -25,7 +25,9 @@ var grabCountries = function(loans) {
   var countries = {};
   $.each(loans, function(index, loan) {
     if (!countries[loan.location.country]) {
-      countries[loan.location.country] = true;
+      countries[loan.location.country] = 1;
+    } else {
+      countries[loan.location.country]++;
     }
   });
   return countries;
@@ -65,7 +67,6 @@ var getData = function() {
     var countryCodes = {};
     var datamapCountries = Datamap.prototype.worldTopo.objects.world.geometries;    
     for (country in borrowerCountries) {
-
       for (var i = 0, j = datamapCountries.length; i < j; i++) {
         if (datamapCountries[i].properties.name === country) {
           countryCodes[country] = datamapCountries[i].id;
@@ -79,7 +80,7 @@ var getData = function() {
     // highlight the countries in countryCodes object
     for (country in countryCodes) {
       var countryCode = countryCodes[country];
-      choropleth[countryCode] = {fillKey: 'borrowerLivesIn'};
+      choropleth[countryCode] = {fillKey: 'borrowerLivesIn', countryCount: borrowerCountries[country]};
     }
 
     // make countries not in countryCodes object the default color
@@ -89,7 +90,6 @@ var getData = function() {
         choropleth[countryCode] = {fillKey: 'defaultFill', countryCount: 0};
       }
     }
-    console.log(choropleth)
 
     map.updateChoropleth(choropleth);
   });
