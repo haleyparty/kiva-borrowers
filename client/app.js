@@ -56,9 +56,11 @@ var makeBorrowerTemplate = function(loans, amountToLend) {
                 <tr><td><b>Total Requested:</b></td> <td>$' + loanAmount + '</td></tr> \
                 <tr><td><i>Less: Amount Funded By Others:</i></td> <td><i>$' + fundedAmount + '</i></td></tr> \
                 <tr><td><div class="divider"></div></td><td><div class="divider"></div></td></tr> \
-                <tr><td><b>Amount Remaining to Fund:</b></td> <td>$' + leftToFund + '</td></tr> \
-                <tr><td></td><td></td></tr> \
-                <tr class="highlighted"><td><b>Total Contribution Percentage: </b></td> <td>' + contributionPercentage + '%</td></tr> \
+                <tr><td><b>Amount Remaining to be Funded:</b></td> <td>$' + leftToFund + '</td></tr> \
+                </table></p> \
+                <p><table style="width:50%"> \
+                <tr><td><b>Amount to Lend:</b></td> <td>' + amountToLend + '</td></tr> \
+                <tr class="highlighted"><td><b>Percentage of Total Requested: </b></td> <td>' + contributionPercentage + '%</td></tr> \
                 <tr><td><i>Amount Left Over After Funding:</i> </td> <td><i>$' + leftoverAfterFunding + '</i></td></tr> \
                 </table></p> \
                 <p><b>Location:</b> ' + loan.location.town + ', ' + loan.location.country + '<br> \
@@ -137,15 +139,20 @@ var JSONcall = function(url, amountToLend, pageNum) {
       createChoropleth({}, {}, datamapCountries, true);
       return;
     }
-    
+
     var callThis = pageNum > 1 ? false : true;
 
+    // get borrower country names and count for the query
     var borrowerCountries = getBorrowerCountryNamesAndCount(data.loans, callThis);
 
+    // get 3-digit country codes for each country name in the query
+      // mapsdata api uses 3-digit codes, kiva uses 2-digit
     var countryCodes = getCountryCodes(borrowerCountries, datamapCountries);
 
+    // add choropleth to the map based on country codes
     createChoropleth(countryCodes, borrowerCountries, datamapCountries, callThis);
 
+    // generate up to 4 page requests (80 borrowers)
     if (pageNum <= 3) {
       pageNum++;
       JSONcall(url + '&page=' + pageNum, amountToLend, pageNum);      
